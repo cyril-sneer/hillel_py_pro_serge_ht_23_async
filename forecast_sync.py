@@ -106,8 +106,6 @@ def get_forecast_accu_weather() -> list:
 
 
 def main():
-    t = time.perf_counter()
-
     fc1 = get_forecast_7timer()
     print('Temperature forecast from 7timer.info:', fc1, sep='\n', end='\n')
 
@@ -120,10 +118,12 @@ def main():
     temp_values = fc1 + fc2 + fc3
 
     average_temp_value = sum(temp_values) / len(temp_values)
-    elapsed_time = time.perf_counter() - t
-    print(f'Average temperature:\n{average_temp_value:.2f} C in {elapsed_time} sec')
+    print(f'Average temperature:\n{average_temp_value:.2f} C')
 
 
 if __name__ == '__main__':
+    t = time.perf_counter()
     main()
+    time_spent = time.perf_counter() - t
+    print(f'\nTime spent: {time_spent:.4f} sec')
 
