@@ -26,12 +26,9 @@ def get_forecast_7timer() -> list:
         "output": 'json',
         "tzshift": 0,
     }
-
     response = requests.get(url=url, params=query_params)
-
     if response.status_code == 200:
         forecast = response.json()
-
         temp_values_for_next_5_days = []
         # Сервис дает прогноз на 8 дней с шагом 3 часа, то есть 8 измерений в сутки.
         # Поэтому для прогноза на ближайшие 5 дней, берем первые 40 значений
@@ -56,7 +53,6 @@ def get_forecast_open_meteo() -> list:
         'hourly': 'temperature_2m',
         'forecast_days': 5,
     }
-
     response = requests.get(url=url, params=query_params)
     if response.status_code == 200:
         forecast = response.json()
@@ -82,13 +78,13 @@ def get_forecast_accu_weather() -> list:
         'apikey': api_key,
         'q': f'{MyCity.lat},{MyCity.lon}'
     }
-
     response = requests.get(url=url, params=query_params)
     if response.status_code == 200:
         location_key = response.json().get('Key')
     else:
         return []
 
+    # Получить прогноз погоды
     url = f'http://dataservice.accuweather.com/forecasts/v1/daily/5day/{location_key}'
     query_params = {
         'apikey': api_key,
