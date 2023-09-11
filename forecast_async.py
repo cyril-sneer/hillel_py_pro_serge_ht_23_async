@@ -1,6 +1,7 @@
 import aiohttp
 import asyncio
 import time
+import json
 
 
 class MyCity:
@@ -27,7 +28,11 @@ async def get_forecast_7timer() -> list:
     async with aiohttp.ClientSession() as session:
         async with session.get(url=url, params=query_params) as response:
             if response.status == 200:
-                forecast = await response.json()
+                # JSON-энкодер библиотеки aiohttp не справляется с JSON-ответом, который генерирует этот сайт.
+                # Поэтому получаем ответ в виде текста и преобразовываем его через энкодер библиотеки json.
+                # Но вообще это странно, т.к. экодер библиотеки requests прекрасно читает этот JSON-ответ.
+                forecast_as_text = await response.text()
+                forecast = json.loads(forecast_as_text)
                 temp_values_for_next_5_days = []
                 # Сервис дает прогноз на 8 дней с шагом 3 часа, то есть 8 измерений в сутки.
                 # Поэтому для прогноза на ближайшие 5 дней, берем первые 40 значений
@@ -45,7 +50,6 @@ async def get_forecast_open_meteo() -> list:
 
     :return: list of values: temperature forecast for the next 5 days at 1 hour intervals
     """
-    return [20]
     url = 'https://api.open-meteo.com/v1/forecast'
     query_params = {
         'latitude': MyCity.lat,
@@ -104,7 +108,6 @@ async def get_forecast_accu_weather() -> list:
                 return temp_values_for_next_5_days
             else:
                 return []
-
 
 
 async def main():
