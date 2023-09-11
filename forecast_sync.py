@@ -1,7 +1,8 @@
 """
 https://github.com/public-apis/public-apis#weather
 """
-import requests, time
+import requests
+import time
 
 
 class MyCity:
