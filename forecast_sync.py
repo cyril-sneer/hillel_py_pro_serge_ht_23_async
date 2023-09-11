@@ -3,8 +3,6 @@ https://github.com/public-apis/public-apis#weather
 """
 import requests
 
-from pprint import pprint
-
 
 class MyCity:
     lon = 3.14
@@ -13,9 +11,10 @@ class MyCity:
 
 def get_forecast_7timer() -> list:
     """
+    Get temperature values for next 5 days from 7timer.info
     http://www.7timer.info/doc.php?lang=en
 
-    :return:
+    :return: list of values: temperature forecast for the next 5 days at 3 hour intervals
     """
 
     url = 'http://www.7timer.info/bin/api.pl'
@@ -44,8 +43,10 @@ def get_forecast_7timer() -> list:
 
 def get_forecast_open_meteo() -> list:
     """
+    Get temperature values for next 5 days from Open Meteo
     https://open-meteo.com/
-    :return:
+
+    :return: list of values: temperature forecast for the next 5 days at 1 hour intervals
     """
     url = 'https://api.open-meteo.com/v1/forecast'
     query_params = {
@@ -66,9 +67,11 @@ def get_forecast_open_meteo() -> list:
 
 def get_forecast_accu_weather() -> list:
     """
+    Get temperature values for next 5 days from AccuWeather
     https://developer.accuweather.com/apis
-    vwKlaeDmagfRGAycHzvxwInGupggm0tF
-    :return:
+    apikey = 'vwKlaeDmagfRGAycHzvxwInGupggm0tF'
+
+    :return: list of values: temperature forecast for the next 5 days - min & max values for each day
     """
     api_key = 'vwKlaeDmagfRGAycHzvxwInGupggm0tF'
 
@@ -101,10 +104,21 @@ def get_forecast_accu_weather() -> list:
     else:
         return []
 
+
 def main():
-    print(get_forecast_7timer())
-    print(get_forecast_open_meteo())
-    print(get_forecast_accu_weather())
+    fc1 = get_forecast_7timer()
+    print('Temperature forecast from 7timer.info:', fc1, sep='\n', end='\n')
+
+    fc2 = get_forecast_open_meteo()
+    print('Temperature forecast from OpenMeteo:', fc2, sep='\n', end='\n')
+
+    fc3 = get_forecast_accu_weather()
+    print('Temperature forecast from AccuWeather:', fc3, sep='\n', end='\n')
+
+    temp_values = fc1 + fc2 + fc3
+
+    average_temp_value = sum(temp_values) / len(temp_values)
+    print(f'Average temperature:\n{average_temp_value:.2f} C')
 
 
 if __name__ == '__main__':
