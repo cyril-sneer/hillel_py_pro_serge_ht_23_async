@@ -1,12 +1,19 @@
 import aiohttp
 import asyncio
+import os
 import time
 import json
+
+from dotenv import load_dotenv
 
 
 class MyCity:
     lon = 3.14
     lat = 50.67
+
+
+def configure():
+    load_dotenv()
 
 
 async def get_forecast_7timer() -> list:
@@ -71,11 +78,10 @@ async def get_forecast_accu_weather() -> list:
     """
     Get temperature values for next 5 days from AccuWeather
     https://developer.accuweather.com/apis
-    apikey = 'vwKlaeDmagfRGAycHzvxwInGupggm0tF'
 
     :return: list of values: temperature forecast for the next 5 days - min & max values for each day
     """
-    api_key = 'vwKlaeDmagfRGAycHzvxwInGupggm0tF'
+    api_key = os.getenv('accu_weather_api_key')
 
     # Получить код местоположения
     url = 'http://dataservice.accuweather.com/locations/v1/cities/geoposition/search'
@@ -111,6 +117,8 @@ async def get_forecast_accu_weather() -> list:
 
 
 async def main():
+
+    configure()
 
     fc1, fc2, fc3 = await asyncio.gather(get_forecast_7timer(), get_forecast_open_meteo(), get_forecast_accu_weather())
 

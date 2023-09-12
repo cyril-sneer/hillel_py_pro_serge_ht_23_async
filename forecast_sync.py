@@ -1,13 +1,19 @@
 """
 https://github.com/public-apis/public-apis#weather
 """
+import os
 import requests
 import time
 
+from dotenv import load_dotenv
 
 class MyCity:
     lon = 3.14
     lat = 50.67
+
+
+def configure():
+    load_dotenv()
 
 
 def get_forecast_7timer() -> list:
@@ -66,11 +72,10 @@ def get_forecast_accu_weather() -> list:
     """
     Get temperature values for next 5 days from AccuWeather
     https://developer.accuweather.com/apis
-    apikey = 'vwKlaeDmagfRGAycHzvxwInGupggm0tF'
 
     :return: list of values: temperature forecast for the next 5 days - min & max values for each day
     """
-    api_key = 'vwKlaeDmagfRGAycHzvxwInGupggm0tF'
+    api_key = os.getenv('accu_weather_api_key')
 
     # Получить код местоположения
     url = 'http://dataservice.accuweather.com/locations/v1/cities/geoposition/search'
@@ -103,6 +108,8 @@ def get_forecast_accu_weather() -> list:
 
 
 def main():
+    configure()
+
     fc1 = get_forecast_7timer()
     print('Temperature forecast from 7timer.info:', fc1, sep='\n', end='\n')
 
